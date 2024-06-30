@@ -23,9 +23,9 @@ func ExamplePolytope() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("%T\n", c.Value) // examples.Square
+	fmt.Printf("%T\n", c.Value) // example.Square
 
 	// Output:
 	// {"kind":"hypercube","dimension":2,"top-left":[1,2],"width":4}
-	// examples.Square
+	// example.Square
 }
