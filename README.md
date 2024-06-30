@@ -69,7 +69,7 @@ Now you can marshal and unmarshal polymorphic JSON objects using `jsonpoly.Conta
 ```go
 inputShape := Square{TopLeft: [2]int{1, 2}, Width: 4}
 
-var c jsonpoly.Container[Polytope, *PolytopeJSONHelper]
+var c jsonpoly.Container[Shape, *ShapeJSONHelper]
 c.Value = inputShape
 
 b, err := json.Marshal(c)
