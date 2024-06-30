@@ -80,6 +80,11 @@ err = json.Unmarshal(b, &c)
 fmt.Printf("%T\n", c.Value) // shapes.Square
 ```
 
+Also check out the
+[marshalling](https://pkg.go.dev/github.com/lovromazgon/jsonpoly#example-Container-Marshal)
+and [unmarshalling](https://pkg.go.dev/github.com/lovromazgon/jsonpoly#example-Container-Unmarshal)
+examples on the package documentation.
+
 ## FAQ
 
 ### How is this different than [`github.com/polyfloyd/gopolyjson`](https://github.com/polyfloyd/gopolyjson)?
