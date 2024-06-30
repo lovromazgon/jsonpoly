@@ -3,6 +3,7 @@ package jsonpoly
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"reflect"
 )
 
@@ -11,19 +12,19 @@ var (
 )
 
 // Container is a generic struct that can be used to unmarshal polymorphic JSON
-// objects into a specific type based on a key. It is using the ContainerHelper
-// interface to determine the type of the object and to create a new instance of
-// the object based on the key.
-type Container[V any, H ContainerHelper[V]] struct {
+// objects into a specific type based on a key. It is using the Helper interface
+// to determine the type of the object and to create a new instance of the
+// unmarshalled object.
+type Container[V any, H Helper[V]] struct {
 	Value V
 }
 
-// ContainerHelper is an interface that must be implemented by the user to
+// Helper is an interface that must be implemented by the user to
 // provide the necessary methods to create and set the value of the object based
 // on the key. The struct implementing this interface should be a pointer type
 // and should contain public fields annotated with JSON tags that match the keys
 // in the JSON object.
-type ContainerHelper[V any] interface {
+type Helper[V any] interface {
 	Get() V
 	Set(V)
 }
@@ -40,6 +41,14 @@ func (c *Container[V, H]) UnmarshalJSON(b []byte) error {
 	// as is. If it's a value, we create a pointer to it for the unmarshalling
 	// to work and store the underlying value in the 'Value' field.
 	val := reflect.ValueOf(v)
+	if !val.IsValid() {
+		// Apparently this is an unknown type, marshal the helper to represent
+		// the type and include it in the error message. We can safely ignore
+		// the error, since the type was already unmarshalled successfully.
+		b, _ := json.Marshal(helper)
+		return fmt.Errorf("unknown type %v", string(b))
+	}
+
 	var ptrVal reflect.Value
 	if val.Kind() != reflect.Ptr {
 		// Create a new pointer type based on the type of 'v'.
@@ -89,8 +98,8 @@ func mergeJSONObjects(o1, o2 []byte) ([]byte, error) {
 		return nil, ErrNotJSONObject
 	}
 
-	// We know this is only used internally and we can manipulate the slices.
-	// We append the second object into the first one, replacing the closing
+	// We know this is only used internally, we can manipulate the slices.
+	// We append the second object to the first one, replacing the closing
 	// object bracket with a comma.
 	o2[0] = ','
 	return append(o1[:len(o1)-1], o2...), nil
