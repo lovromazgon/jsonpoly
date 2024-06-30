@@ -1,5 +1,10 @@
 # JSONPoly
 
+[![License](https://img.shields.io/github/license/lovromazgon/jsonpoly)](https://github.com/ConduitIO/conduit/blob/main/LICENSE)
+[![Test](https://github.com/lovromazgon/jsonpoly/actions/workflows/test.yml/badge.svg)](https://github.com/lovromazgon/jsonpoly/actions/workflows/test.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/lovromazgon/jsonpoly)](https://goreportcard.com/report/github.com/lovromazgon/jsonpoly)
+[![Go Reference](https://pkg.go.dev/badge/github.com/lovromazgon/jsonpoly.svg)](https://pkg.go.dev/github.com/lovromazgon/jsonpoly)
+
 Utilities for marshalling and unmarshalling polymorphic JSON objects in Go
 without generating code.
 
