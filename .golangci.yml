@@ -1,0 +1,30 @@
+version: "2"
+linters:
+  default: all
+  disable:
+    - depguard
+    - err113
+    - ireturn
+    - nlreturn
+    - mnd
+    - paralleltest
+    - tagliatelle
+    - testpackage
+    - varnamelen
+    - wsl
+  exclusions:
+    generated: lax
+    warn-unused: true
+    rules:
+      - path: _test\.go
+        linters:
+          - exhaustruct
+          - forcetypeassert
+          - funlen
+          - gochecknoglobals
+          - perfsprint
+      - path: example/
+        linters:
+          - exhaustruct
+          - gochecknoglobals
+          - revive

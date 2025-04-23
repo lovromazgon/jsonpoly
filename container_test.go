@@ -37,6 +37,11 @@ func (c Cat) Name() string {
 	return c.XName
 }
 
+type Pikachu struct{}
+
+func (Pikachu) Type() string { return "pikachu" }
+func (Pikachu) Name() string { return "Pikachu" }
+
 type UnknownAnimal struct {
 	XType string `json:"-"`
 	XName string `json:"name"`
@@ -52,8 +57,9 @@ func (a UnknownAnimal) Name() string {
 
 var (
 	KnownAnimals = map[string]Animal{
-		"dog": Dog{},
-		"cat": Cat{},
+		Dog{}.Type():     Dog{},
+		Cat{}.Type():     Cat{},
+		Pikachu{}.Type(): Pikachu{},
 	}
 )
 
@@ -138,6 +144,11 @@ func TestContainer_value(t *testing.T) {
 			want: `{"type":"cat","name":"Whiskers","owner":"Alice","color":"White"}`,
 		},
 		{
+			name: "pikachu",
+			have: Pikachu{},
+			want: `{"type":"pikachu"}`,
+		},
+		{
 			name: "dolphin",
 			have: UnknownAnimal{
 				XType: "dolphin",
@@ -149,7 +160,6 @@ func TestContainer_value(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(fmt.Sprintf("%s_marshal", tc.name), func(t *testing.T) {
-			t.Skipf("skipping test")
 			c := Container[Animal, *AnimalContainerHelper]{
 				Value: tc.have,
 			}
@@ -186,8 +196,9 @@ type AnimalPtrContainerHelper struct {
 
 func (h *AnimalPtrContainerHelper) Get() Animal {
 	knownAnimals := map[string]Animal{
-		"dog": &Dog{},
-		"cat": &Cat{},
+		Dog{}.Type():     &Dog{},
+		Cat{}.Type():     &Cat{},
+		Pikachu{}.Type(): &Pikachu{},
 	}
 
 	if a, ok := knownAnimals[h.Type]; ok {
@@ -222,6 +233,11 @@ func TestContainer_pointer(t *testing.T) {
 				Color: "White",
 			},
 			want: `{"type":"cat","name":"Whiskers","owner":"Alice","color":"White"}`,
+		},
+		{
+			name: "pikachu",
+			have: &Pikachu{},
+			want: `{"type":"pikachu"}`,
 		},
 		{
 			name: "dolphin",
